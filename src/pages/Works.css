@@ -1,0 +1,236 @@
+.works {
+  padding-top: clamp(2.5rem, 6vh, 5rem);
+}
+
+/* ---------- Header ---------- */
+.works__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.6rem;
+}
+
+.works__titleblock {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.works__index { font-size: 1.4rem; }
+
+.works__title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 9vw, 7rem);
+  line-height: 0.85;
+  letter-spacing: 0.02em;
+}
+
+.works__count {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--paper-dim);
+  padding-bottom: 0.5rem;
+}
+
+/* ---------- Controls ---------- */
+.works__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.4rem;
+  padding-bottom: 0.5rem;
+}
+
+.works__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(244, 238, 226, 0.16);
+  border-radius: 40px;
+  transition: all 0.25s var(--ease);
+}
+.chip:hover {
+  color: var(--paper);
+  border-color: rgba(244, 238, 226, 0.4);
+}
+.chip--active {
+  color: var(--ink);
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.works__sort {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.works__sort-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+}
+/* Themed select: custom chevron + chip-matched shell.
+   The trigger is fully styled; the option list uses accent colors
+   where the browser allows it. */
+.works__select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.works__select select {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink-2);
+  border: 1px solid rgba(244, 238, 226, 0.16);
+  border-radius: 40px;
+  padding: 0.5rem 2.4rem 0.5rem 1rem;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease),
+    color 0.25s var(--ease);
+}
+.works__select select:hover {
+  border-color: var(--gold);
+  background: var(--ink-3);
+}
+.works__select select:focus-visible {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(242, 177, 52, 0.25);
+}
+/* Option list — styleable in most modern browsers. */
+.works__select select option {
+  background: var(--ink-2);
+  color: var(--paper);
+}
+
+.works__select-chevron {
+  position: absolute;
+  right: 0.9rem;
+  color: var(--gold);
+  pointer-events: none;
+  transition: transform 0.25s var(--ease);
+}
+.works__select select:hover + .works__select-chevron {
+  transform: translateY(1px);
+}
+
+.works__rule { margin-bottom: 2.6rem; }
+
+.works__empty {
+  color: var(--paper-dim);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+/* ---------- Masonry ---------- */
+.masonry {
+  column-count: 4;
+  column-gap: clamp(1rem, 2vw, 1.6rem);
+}
+@media (max-width: 1100px) { .masonry { column-count: 3; } }
+@media (max-width: 760px)  { .masonry { column-count: 2; } }
+@media (max-width: 440px)  { .masonry { column-count: 1; } }
+
+.tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: left;
+  break-inside: avoid;
+  margin-bottom: clamp(1rem, 2vw, 1.6rem);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--ink-2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  animation: tileIn 0.6s var(--ease) both;
+  animation-delay: var(--d);
+}
+
+.tile__img {
+  overflow: hidden;
+  line-height: 0;
+}
+.tile__img img {
+  width: 100%;
+  height: auto;
+  transition: transform 0.7s var(--ease), filter 0.5s var(--ease);
+  filter: saturate(0.92) brightness(0.95);
+}
+.tile:hover .tile__img img {
+  transform: scale(1.05);
+  filter: saturate(1.15) brightness(1);
+}
+
+/* Info bar slides up on hover */
+.tile__info {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 1.4rem 1.1rem 1rem;
+  background: linear-gradient(to top, rgba(12,10,18,0.92), transparent);
+  transform: translateY(12px);
+  opacity: 0;
+  transition: transform 0.4s var(--ease), opacity 0.4s var(--ease);
+}
+.tile:hover .tile__info { transform: translateY(0); opacity: 1; }
+
+.tile__name {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+.tile__cats {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.tile__view {
+  position: absolute;
+  top: 0.9rem; right: 0.9rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gold);
+  padding: 0.35rem 0.7rem;
+  border-radius: 40px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+}
+.tile:hover .tile__view { opacity: 1; transform: translateY(0); }
+
+.tile:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@keyframes tileIn {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

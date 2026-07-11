@@ -1,0 +1,185 @@
+# =============================================================
+# Decap CMS configuration
+# This defines the friendly dashboard the artist uses to add art.
+# On Netlify, the artist logs in at /admin with their email
+# (Netlify Identity + Git Gateway) — no GitHub account needed.
+# =============================================================
+
+backend:
+  name: git-gateway
+  branch: main
+
+# Local dev: run `npx decap-server` and visit /admin to test
+# without touching GitHub. Comment out for production if desired.
+local_backend: true
+
+# Where uploaded images are stored in the repo, and how the site
+# references them at runtime. Images land in public/uploads and are
+# served from the site root as /uploads/<file>.
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# Nicer commit messages in the GitHub history.
+site_url: /
+display_url: /
+logo_url: /favicon.svg
+
+collections:
+  - name: "works"
+    label: "Artworks"
+    label_singular: "Artwork"
+    folder: "src/content/works"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    summary: "{{title}} ({{year}})"
+    sortable_fields: [uploadDate, year, title]
+    view_filters:
+      - label: "Available"
+        field: available
+        pattern: true
+    fields:
+      - { name: "title", label: "Title", widget: "string" }
+      - {
+          name: "image",
+          label: "Artwork image",
+          widget: "image",
+          hint: "Upload a web-friendly image (JPG/PNG/WebP, ideally under ~2 MB).",
+        }
+      - {
+          name: "description",
+          label: "Description",
+          widget: "text",
+          hint: "A short note about the piece.",
+        }
+      - {
+          name: "categories",
+          label: "Categories / Tags",
+          widget: "list",
+          hint: "Add one or more, e.g. Painting, Illustration, Portrait.",
+          default: ["Painting"],
+        }
+      - {
+          name: "year",
+          label: "Year created",
+          widget: "number",
+          value_type: "int",
+          min: 1900,
+          max: 2100,
+          required: false,
+        }
+      - {
+          name: "medium",
+          label: "Medium",
+          widget: "string",
+          required: false,
+          hint: "e.g. Oil on canvas, Digital · Procreate, 35mm film.",
+        }
+      - {
+          name: "dimensions",
+          label: "Dimensions",
+          widget: "string",
+          required: false,
+          hint: "e.g. 60 × 80 cm (leave blank for digital work).",
+        }
+      - {
+          name: "available",
+          label: "Available / for sale",
+          widget: "boolean",
+          default: false,
+          required: false,
+        }
+      - {
+          name: "uploadDate",
+          label: "Date added",
+          widget: "datetime",
+          default: "",
+          hint: "Auto-set to now; used for 'Newest' sorting.",
+        }
+
+  # ---------------------------------------------------------------
+  # Site settings: everything in src/content/site.json, editable
+  # from the dashboard — name, statement, portrait, socials, and
+  # the hand-picked "Selected" works on the home page.
+  # ---------------------------------------------------------------
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - name: "site"
+        label: "General / Home / About"
+        file: "src/content/site.json"
+        fields:
+          - { name: "artistName", label: "Artist name", widget: "string" }
+          - {
+              name: "tagline",
+              label: "Tagline",
+              widget: "string",
+              hint: "Short line under the name, e.g. Painting · Illustration · Photography.",
+            }
+          - {
+              name: "heroStatement",
+              label: "Home hero statement",
+              widget: "text",
+              hint: "The italic sentence on the home page.",
+            }
+          - {
+              name: "heroPortrait",
+              label: "Hero portrait (photo of the artist)",
+              widget: "image",
+              required: false,
+              hint: "Optional. Shows beside your name on the home page. Leave empty for a text-only hero.",
+            }
+          - {
+              name: "aboutImage",
+              label: "About page image",
+              widget: "image",
+              required: false,
+              hint: "Optional. A studio/portrait photo shown on the About page. Leave empty to hide.",
+            }
+          - {
+              name: "email",
+              label: "Contact email",
+              widget: "string",
+              required: false,
+            }
+          - {
+              name: "socials",
+              label: "Social links",
+              widget: "list",
+              required: false,
+              label_singular: "Social link",
+              summary: "{{fields.platform}}",
+              hint: "Add any platforms — Instagram, LinkedIn, DeviantArt, ArtStation, etc.",
+              fields:
+                - {
+                    name: "platform",
+                    label: "Platform name",
+                    widget: "string",
+                    hint: "e.g. LinkedIn, DeviantArt.",
+                  }
+                - {
+                    name: "url",
+                    label: "Link",
+                    widget: "string",
+                    hint: "Full URL, e.g. https://linkedin.com/in/you.",
+                  }
+            }
+          - {
+              name: "featured",
+              label: "Selected works (home page)",
+              widget: "relation",
+              collection: "works",
+              search_fields: ["title"],
+              value_field: "{{slug}}",
+              display_fields: ["title"],
+              multiple: true,
+              required: false,
+              min: 0,
+              max: 6,
+              hint: "Pick which pieces appear in the home 'Selected' strip. Leave empty to auto-show your newest work.",
+            }
+          - {
+              name: "aboutBody",
+              label: "About page text",
+              widget: "text",
+              hint: "Your artist statement. Separate paragraphs with a blank line.",
+            }

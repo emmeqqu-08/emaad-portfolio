@@ -1,0 +1,13 @@
+{
+  "artistName": "EMAAD",
+  "tagline": "Painting · Illustration · Photography",
+  "heroStatement": "An ongoing collection of work made across canvas, screen, and film — line, color, and the quiet drama in between.",
+  "heroPortrait": "",
+  "aboutImage": "",
+  "email": "hello@example.com",
+  "socials": [
+    { "platform": "Instagram", "url": "https://instagram.com/" }
+  ],
+  "featured": [],
+  "aboutBody": "I'm a multidisciplinary artist working between traditional painting, digital illustration, and photography. My work chases contrast — bold color against stillness, motion frozen mid-frame. This site is a living archive of finished pieces and experiments.\n\nOpen to commissions and collaborations."
+}

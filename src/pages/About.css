@@ -1,0 +1,109 @@
+.about {
+  padding-top: clamp(3rem, 9vh, 7rem);
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 6vw, 6rem);
+}
+
+.about__aside {
+  position: sticky;
+  top: 110px;
+  align-self: start;
+}
+
+.about__index {
+  font-size: 1.4rem;
+  display: block;
+  margin-bottom: 0.8rem;
+}
+
+.about__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  margin-bottom: 2rem;
+}
+
+.about__contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.about__contact {
+  font-size: 0.95rem;
+  color: var(--teal);
+  transition: color 0.25s var(--ease), letter-spacing 0.25s var(--ease);
+}
+.about__contact:hover {
+  color: var(--gold);
+  letter-spacing: 0.03em;
+}
+
+.about__body {
+  position: relative;
+  max-width: 60ch;
+}
+.about__body p {
+  font-size: 1.1rem;
+  line-height: 1.85;
+  color: var(--paper-dim);
+  margin-bottom: 1.6rem;
+}
+.about__lead {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem) !important;
+  font-style: italic;
+  line-height: 1.5 !important;
+  color: var(--paper) !important;
+}
+
+/* ---- About image ---- */
+.about__figure {
+  position: relative;
+  width: clamp(200px, 90%, 320px);
+  margin: 0 0 2.2rem;
+  animation: fadeUp 0.8s var(--ease) 0.25s both;
+}
+.about__figure img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius);
+  filter: saturate(1.05) contrast(1.03);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  position: relative;
+  z-index: 2;
+}
+.about__figure-frame {
+  position: absolute;
+  inset: 0;
+  transform: translate(-12px, 12px);
+  border: 2px solid var(--magenta);
+  border-radius: var(--radius);
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.about__glyph {
+  display: block;
+  clear: both;
+  font-size: 2rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 780px) {
+  .about__grid { grid-template-columns: 1fr; }
+  .about__aside { position: static; }
+  .about__figure {
+    width: clamp(180px, 55vw, 260px);
+  }
+}
