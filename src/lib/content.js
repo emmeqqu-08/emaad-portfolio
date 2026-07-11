@@ -88,10 +88,19 @@ export const works = Object.entries(files)
   // newest upload first by default
   .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
 
-/* All unique categories, for filter UI. */
-export const allCategories = [
-  ...new Set(works.flatMap((w) => w.categories)),
-].sort();
+/* Categories for the filter UI. The artist manages the master list in
+   the dashboard (site.categories), which controls order and wording. We
+   fall back to auto-deriving from the works if that list is empty. Only
+   categories that actually appear on at least one work are shown, so an
+   unused category never renders an empty filter. */
+export const allCategories = (() => {
+  const used = new Set(works.flatMap((w) => w.categories));
+  const managed = Array.isArray(site.categories) ? site.categories : [];
+  if (managed.length) {
+    return managed.filter((c) => used.has(c));
+  }
+  return [...used].sort();
+})();
 
 /* Hand-picked featured works for the home "Selected" strip.
    The artist chooses these by slug in the dashboard; if none are
@@ -104,7 +113,9 @@ export const featuredWorks = (() => {
   return resolved.length ? resolved : works.slice(0, 4);
 })();
 
-/* Social links, normalized. Empty entries are dropped. */
+/* Social links, normalized. Empty entries are dropped. The optional
+   `icon` field lets the artist pick an icon in the dashboard; if unset
+   we fall back to guessing from the platform name. */
 export const socials = (Array.isArray(site.socials) ? site.socials : [])
   .filter((s) => s && s.url && s.platform)
-  .map((s) => ({ platform: s.platform, url: s.url }));
+  .map((s) => ({ platform: s.platform, url: s.url, icon: s.icon || '' }));

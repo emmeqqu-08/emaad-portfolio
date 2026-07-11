@@ -2,11 +2,36 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { site, featuredWorks } from '../lib/content';
 import { pageMotion } from '../lib/motion';
+import { useAutoScroll } from '../lib/useAutoScroll';
 import './Home.css';
+
+function TeaserCard({ w, i, ariaHidden = false }) {
+  return (
+    <Link
+      to={`/works?open=${encodeURIComponent(w.slug)}`}
+      className={`teaser__card teaser__card--${i % 2}`}
+      tabIndex={ariaHidden ? -1 : undefined}
+      aria-hidden={ariaHidden || undefined}
+    >
+      <div className="teaser__frame">
+        <img src={w.image} alt={w.title} loading="lazy" />
+        <div className="teaser__overlay">
+          <span className="teaser__cat">{w.categories[0] ?? 'Work'}</span>
+          <span className="teaser__view">View ↗</span>
+        </div>
+      </div>
+      <div className="teaser__caption">
+        <span className="teaser__name">{w.title}</span>
+        <span className="teaser__year">{w.year}</span>
+      </div>
+    </Link>
+  );
+}
 
 export default function Home() {
   const featured = featuredWorks;
   const hasPortrait = Boolean(site.heroPortrait);
+  const { ref: trackRef, canScroll } = useAutoScroll(0.4);
 
   return (
     <motion.div {...pageMotion} className="home">
@@ -71,28 +96,18 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="teaser__track">
+        <div
+          className={'teaser__track' + (canScroll ? ' is-scrolling' : '')}
+          ref={trackRef}
+        >
           {featured.map((w, i) => (
-            <Link
-              key={w.slug}
-              to={`/works?open=${encodeURIComponent(w.slug)}`}
-              className={`teaser__card teaser__card--${i % 2}`}
-            >
-              <div className="teaser__frame">
-                <img src={w.image} alt={w.title} loading="lazy" />
-                <div className="teaser__overlay">
-                  <span className="teaser__cat">
-                    {w.categories[0] ?? 'Work'}
-                  </span>
-                  <span className="teaser__view">View ↗</span>
-                </div>
-              </div>
-              <div className="teaser__caption">
-                <span className="teaser__name">{w.title}</span>
-                <span className="teaser__year">{w.year}</span>
-              </div>
-            </Link>
+            <TeaserCard key={w.slug} w={w} i={i} />
           ))}
+          {/* Duplicate set for seamless looping when overflowing. */}
+          {canScroll &&
+            featured.map((w, i) => (
+              <TeaserCard key={`dup-${w.slug}`} w={w} i={i} ariaHidden />
+            ))}
         </div>
       </section>
     </motion.div>

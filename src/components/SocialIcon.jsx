@@ -91,10 +91,17 @@ const genericGlobe = (
   </>
 );
 
-export default function SocialIcon({ platform, size = 18 }) {
-  const key = (platform || '').toLowerCase().replace(/[^a-z()\s]/g, '').trim();
+/* Icon keys a user can choose in the dashboard mirror the keys in
+   `paths` above, plus "website" (the generic globe). The dashboard's
+   dropdown options live in public/admin/config.yml. */
+
+export default function SocialIcon({ platform, icon, size = 18 }) {
+  // An explicit icon choice (from the dashboard) wins; otherwise we
+  // guess from the platform name.
+  const source = (icon || platform || '').toLowerCase();
+  const key = source.replace(/[^a-z()\s]/g, '').trim();
   const resolved = aliases[key] || key;
-  const glyph = paths[resolved] || genericGlobe;
+  const glyph = resolved === 'website' ? genericGlobe : paths[resolved] || genericGlobe;
 
   return (
     <svg

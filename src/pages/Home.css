@@ -232,8 +232,9 @@
 }
 .teaser__all:hover { color: var(--gold); }
 
-/* Horizontal carousel: scroll-snaps when items overflow the row.
-   With few items it simply sits left-aligned; with many it scrolls. */
+/* Horizontal carousel. With few items it sits left-aligned; with many
+   it overflows and auto-scrolls (see useAutoScroll). Manual scroll-snap
+   applies only when NOT auto-scrolling, so the two don't fight. */
 .teaser__track {
   display: flex;
   gap: clamp(1rem, 2.5vw, 2rem);
@@ -246,6 +247,16 @@
   padding-inline: var(--gutter);
   scrollbar-width: thin;
   scrollbar-color: var(--plum) transparent;
+}
+
+/* When auto-scrolling: drop snap and hide the scrollbar for a clean
+   marquee feel. Hovering pauses it (handled in the hook). */
+.teaser__track.is-scrolling {
+  scroll-snap-type: none;
+  scrollbar-width: none;
+}
+.teaser__track.is-scrolling::-webkit-scrollbar {
+  display: none;
 }
 
 .teaser__card {

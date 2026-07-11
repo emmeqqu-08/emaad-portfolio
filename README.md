@@ -65,19 +65,36 @@ the site rebuilds automatically. All free, no subscriptions.
 
 The dashboard has two sections:
 
-- **Artworks** — add / edit / delete pieces.
+- **Artworks** — add / edit / delete pieces. Categories are picked from the
+  master list (see below), so they stay consistent across the site.
 - **Site Settings → General / Home / About** — edit everything in `site.json`
   with no code:
+  - **Browser tab title** and **link preview description** — what shows in the
+    browser tab and when the site link is shared on social/chat. (These are also
+    baked into the static HTML at build time so link-preview crawlers see them —
+    see `scripts/inject-meta.js`.)
   - Artist name, tagline, hero statement, About text.
-  - **Hero portrait** — upload a photo of the artist to show beside the name on
-    the home page (leave empty for a text-only hero).
-  - **Social links** — an add-any-number list. Type a platform name (Instagram,
-    LinkedIn, DeviantArt, ArtStation, …) and its URL; it appears in the footer
-    and About page automatically.
+  - **Hero portrait** and **About page image** — upload photos of the artist
+    (leave empty to hide).
+  - **Categories (master list)** — add or remove the categories used across the
+    site. These become the options when tagging artworks and the filter chips on
+    the Works page. A category only appears as a filter once at least one work
+    uses it.
+  - **Social links** — an add-any-number list. Each has a platform name, URL, and
+    an **icon** you pick from a dropdown (Instagram, LinkedIn, DeviantArt,
+    ArtStation, Behance, X, Facebook, YouTube, TikTok, Pinterest, Dribbble, or a
+    generic globe). Shows in the footer and About page.
   - **Selected works** — a searchable picker to choose which pieces show in the
-    home "Selected" strip (leave empty to auto-show the newest work).
+    home "Selected" strip (leave empty to auto-show the newest work). If more are
+    picked than fit the row, the strip auto-scrolls as a carousel.
 
 Config lives in [`public/admin/config.yml`](public/admin/config.yml).
+
+> **Previewing the admin locally:** the Vite dev server (`npm run dev`) serves the
+> React app for `/admin/`, so to see the real dashboard run `npm run build && npm
+> run preview` and open `/admin/`. For editing content locally without touching
+> GitHub, also run `npx decap-server` in another terminal (the config has
+> `local_backend: true`).
 
 ---
 
@@ -108,12 +125,49 @@ GitHub account required.
 ### Testing the CMS locally (optional)
 
 `local_backend: true` is set in the config, so you can test the dashboard without
-touching GitHub:
+touching GitHub. Note the admin only renders from a production build:
 
 ```bash
 npx decap-server        # in one terminal
-npm run dev             # in another; visit http://localhost:5173/admin
+npm run build && npm run preview   # in another; visit http://localhost:4173/admin/
 ```
+
+---
+
+## Transferring the repo to the artist's GitHub + shared access
+
+The site is theirs, so the GitHub repo should live in their account. Here's how
+that works and how you keep access.
+
+**Transfer the repo (recommended — keeps history):**
+1. In GitHub: repo → **Settings → General → Transfer ownership** → enter the
+   artist's GitHub username. (Or: they create an empty repo and you
+   `git push` to it; transfer is cleaner as it preserves issues/history.)
+2. After transfer, the repo URL changes to `github.com/<artist>/<repo>`. Update
+   your local remote: `git remote set-url origin <new-url>`.
+3. The artist adds you back as a collaborator: their repo → **Settings →
+   Collaborators → Add people** → your GitHub username. Now you both can push.
+
+**Reconnect Netlify after the transfer:** Netlify's GitHub link is tied to the
+old repo path, so relink it once — Netlify site → **Site configuration → Build &
+deploy → Continuous deployment → Manage repository / Link to a different
+repository** → pick the artist's repo. (The build settings and `netlify.toml`
+carry over.)
+
+**Can both of you access the Netlify backend?** Yes — two separate kinds of access:
+
+- **Netlify dashboard access** (deploys, settings, Identity, billing): Netlify
+  Team → **Members → Invite members** → add the other person's email. Free tier
+  allows multiple members. Whoever owns the Netlify team owns the site; the other
+  is added as a member/collaborator.
+- **The `/admin` content editor** (adding artwork, editing settings): this is
+  gated by **Netlify Identity**, separate from GitHub and the Netlify team. Just
+  invite each person's email under **Identity → Invite users**. Both you and the
+  artist can be Identity users and both edit content at `/admin`.
+
+So a typical setup: the **artist owns** the GitHub repo and the Netlify site;
+**you're added** as a GitHub collaborator, a Netlify team member, and an Identity
+user — giving you full ability to help maintain and edit going forward.
 
 ---
 

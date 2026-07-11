@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import Nav from './components/Nav';
@@ -5,9 +6,27 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Works from './pages/Works';
 import About from './pages/About';
+import { site } from './lib/content';
 
 export default function App() {
   const location = useLocation();
+
+  // Keep the browser-tab title and meta description in sync with the
+  // values the artist sets in the dashboard. (For social-embed previews,
+  // these are also baked into the static HTML at build time — see
+  // scripts/inject-meta.js — since link crawlers don't run JS.)
+  useEffect(() => {
+    if (site.siteTitle) document.title = site.siteTitle;
+    if (site.metaDescription) {
+      let tag = document.querySelector('meta[name="description"]');
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', 'description');
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', site.metaDescription);
+    }
+  }, []);
 
   return (
     <>

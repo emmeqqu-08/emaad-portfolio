@@ -45,7 +45,7 @@ export default function SocialLinks({ variant = 'footer' }) {
           rel="noreferrer"
           className="socials__link"
         >
-          <SocialIcon platform={s.platform} />
+          <SocialIcon platform={s.platform} icon={s.icon} />
           <span>{s.platform}</span>
         </a>
       ))}

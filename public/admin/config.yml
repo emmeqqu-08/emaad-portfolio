@@ -54,9 +54,15 @@ collections:
       - {
           name: "categories",
           label: "Categories / Tags",
-          widget: "list",
-          hint: "Add one or more, e.g. Painting, Illustration, Portrait.",
-          default: ["Painting"],
+          widget: "relation",
+          collection: "settings",
+          file: "site",
+          value_field: "categories.*",
+          search_fields: ["categories.*"],
+          display_fields: ["categories.*"],
+          multiple: true,
+          min: 1,
+          hint: "Pick one or more. Manage the master list in Site Settings → Categories.",
         }
       - {
           name: "year",
@@ -108,6 +114,18 @@ collections:
         label: "General / Home / About"
         file: "src/content/site.json"
         fields:
+          - {
+              name: "siteTitle",
+              label: "Browser tab title / link title",
+              widget: "string",
+              hint: "Shows in the browser tab and as the title when the site link is shared. e.g. Emaad — Selected Works.",
+            }
+          - {
+              name: "metaDescription",
+              label: "Link preview description",
+              widget: "text",
+              hint: "The blurb shown when the site link is pasted into social media / chat. Keep it under ~160 characters.",
+            }
           - { name: "artistName", label: "Artist name", widget: "string" }
           - {
               name: "tagline",
@@ -142,27 +160,42 @@ collections:
               required: false,
             }
           - {
-              name: "socials",
-              label: "Social links",
+              name: "categories",
+              label: "Categories (master list)",
               widget: "list",
               required: false,
-              label_singular: "Social link",
-              summary: "{{fields.platform}}",
-              hint: "Add any platforms — Instagram, LinkedIn, DeviantArt, ArtStation, etc.",
-              fields:
-                - {
-                    name: "platform",
-                    label: "Platform name",
-                    widget: "string",
-                    hint: "e.g. LinkedIn, DeviantArt.",
-                  }
-                - {
-                    name: "url",
-                    label: "Link",
-                    widget: "string",
-                    hint: "Full URL, e.g. https://linkedin.com/in/you.",
-                  }
+              hint: "Add or remove the categories used across the site. These are the options you can tag artworks with and the filters shown on the Works page.",
+              default: ["Painting", "Illustration", "Photography"],
             }
+          - name: "socials"
+            label: "Social links"
+            widget: "list"
+            required: false
+            label_singular: "Social link"
+            summary: "{{fields.platform}}"
+            hint: "Add any platforms — Instagram, LinkedIn, DeviantArt, ArtStation, etc."
+            fields:
+              - { name: "platform", label: "Platform name", widget: "string", hint: "e.g. LinkedIn, DeviantArt." }
+              - { name: "url", label: "Link", widget: "string", hint: "Full URL, e.g. https://linkedin.com/in/you." }
+              - name: "icon"
+                label: "Icon"
+                widget: "select"
+                required: false
+                default: "website"
+                hint: "Pick the icon for this link."
+                options:
+                  - { label: "Instagram", value: "instagram" }
+                  - { label: "LinkedIn", value: "linkedin" }
+                  - { label: "DeviantArt", value: "deviantart" }
+                  - { label: "ArtStation", value: "artstation" }
+                  - { label: "Behance", value: "behance" }
+                  - { label: "X / Twitter", value: "x" }
+                  - { label: "Facebook", value: "facebook" }
+                  - { label: "YouTube", value: "youtube" }
+                  - { label: "TikTok", value: "tiktok" }
+                  - { label: "Pinterest", value: "pinterest" }
+                  - { label: "Dribbble", value: "dribbble" }
+                  - { label: "Website (globe)", value: "website" }
           - {
               name: "featured",
               label: "Selected works (home page)",
