@@ -6,7 +6,10 @@
       "icon": "instagram"
     }
   ],
-  "featured": [],
+  "featured": [
+    "2023-portrait-static",
+    "2026-dumb"
+  ],
   "aboutImage": "",
   "tagline": "Painting · Illustration · Photography",
   "aboutBody": "I'm a multidisciplinary artist working between traditional painting, digital illustration, and photography. My work chases contrast — bold color against stillness, motion frozen mid-frame. This site is a living archive of finished pieces and experiments.\n\nOpen to commissions and collaborations.",
