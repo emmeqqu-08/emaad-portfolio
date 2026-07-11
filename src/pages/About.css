@@ -23,7 +23,7 @@
 .about__title {
   font-family: var(--font-display);
   font-size: clamp(2.6rem, 7vw, 5rem);
-  line-height: 0.9;
+  line-height: 1.15;
   letter-spacing: 0.02em;
   margin-bottom: 2rem;
 }

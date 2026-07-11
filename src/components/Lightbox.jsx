@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import './Lightbox.css';
 
@@ -33,7 +34,12 @@ export default function Lightbox({ work, onClose, onPrev, onNext }) {
     };
   }, [work, handleKey]);
 
-  return (
+  // Rendered through a portal to document.body so it is never nested
+  // inside a page-transition container. A CSS transform on an ancestor
+  // turns position:fixed into position:absolute, which was causing the
+  // lightbox to anchor to the (animating, off-screen) page instead of
+  // the viewport — the "loads off screen then centers" jank.
+  return createPortal(
     <AnimatePresence>
       {work && (
         <motion.div
@@ -127,6 +133,7 @@ export default function Lightbox({ work, onClose, onPrev, onNext }) {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

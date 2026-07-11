@@ -15,7 +15,7 @@ export default function About() {
           <h1 className="about__title">
             About
             <br />
-            the Artist
+            Me
           </h1>
 
           {site.aboutImage && (

@@ -44,7 +44,7 @@ export default function Home() {
         <div className="hero__inner shell">
           <div className="hero__text">
             <p className="hero__eyebrow">
-              <span className="hero__dot" /> Portfolio · Archive
+              <span className="hero__dot" /> Portfolio · Showcase
             </p>
 
             <h1 className="hero__title">
@@ -54,7 +54,7 @@ export default function Home() {
                   className="hero__char"
                   style={{ animationDelay: `${0.15 + i * 0.06}s` }}
                 >
-                  {ch}
+                  <span className="hero__char-inner">{ch}</span>
                 </span>
               ))}
             </h1>
@@ -63,11 +63,11 @@ export default function Home() {
 
             <div className="hero__actions">
               <Link to="/works" className="btn btn--gold">
-                View the Works
+                My Works
                 <span className="btn__arrow" aria-hidden>→</span>
               </Link>
               <Link to="/about" className="btn btn--ghost">
-                About the Artist
+                About Me
               </Link>
             </div>
           </div>
@@ -89,7 +89,7 @@ export default function Home() {
       <section className="teaser shell">
         <div className="teaser__head">
           <h2 className="teaser__title">
-            <span className="teaser__index">01</span> Selected
+            <span className="teaser__index">01</span> Spotlight
           </h2>
           <Link to="/works" className="teaser__all">
             All works <span aria-hidden>↗</span>

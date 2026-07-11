@@ -55,6 +55,13 @@ export default function Works() {
     const idx = filtered.findIndex((w) => w.slug === slug);
     if (idx !== -1) {
       setLightboxIndex(idx);
+      // Position the grid behind the lightbox so the opened piece is in
+      // view when the lightbox is closed. Done without smooth-scroll so
+      // there's no visible movement under the overlay.
+      requestAnimationFrame(() => {
+        const tile = document.querySelector(`.tile[data-slug="${slug}"]`);
+        if (tile) tile.scrollIntoView({ block: 'center', behavior: 'auto' });
+      });
       // clear the param so refresh/back doesn't force-reopen
       searchParams.delete('open');
       setSearchParams(searchParams, { replace: true });
@@ -145,6 +152,7 @@ export default function Works() {
             {filtered.map((w, i) => (
               <button
                 key={w.slug}
+                data-slug={w.slug}
                 className="tile"
                 style={{ '--d': `${(i % 8) * 0.05}s` }}
                 onClick={() => setLightboxIndex(i)}

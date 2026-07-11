@@ -88,7 +88,7 @@
   font-size: 0.78rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--teal);
+  color: var(--gold);
   margin-bottom: 1.6rem;
   animation: fadeUp 0.7s var(--ease) 0.05s both;
 }
@@ -96,37 +96,59 @@
 .hero__dot {
   width: 8px; height: 8px;
   border-radius: 50%;
-  background: var(--teal);
-  box-shadow: 0 0 14px var(--teal);
+  background: var(--gold);
+  box-shadow: 0 0 14px var(--gold);
 }
 
 .hero__title {
   font-family: var(--font-display);
   font-size: clamp(4rem, 16vw, 13rem);
-  line-height: 0.82;
+  /* Roomier line-height + vertical padding so tall/round glyphs (O, Q)
+     aren't clipped top or bottom. */
+  line-height: 1.05;
   letter-spacing: 0.01em;
   margin-bottom: 1.8rem;
+  padding-block: 0.12em;
   display: flex;
   flex-wrap: wrap;
 }
 
+/* Wordmark: white fill with a blue outline by default; on hover the
+   letter turns pink and scales up.
+
+   Two nested spans on purpose: the OUTER span runs the entrance
+   `dropIn` animation (which, with fill-mode `both`, holds a transform
+   after it ends). If the hover scale lived on the same element, that
+   held animation transform would override it. So the INNER span owns
+   the color/outline + hover scale, keeping the two transforms separate. */
 .hero__char {
+  position: relative;
   display: inline-block;
-  background: linear-gradient(
-    180deg,
-    var(--paper) 0%,
-    var(--paper) 50%,
-    var(--gold-deep) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
   animation: dropIn 0.75s var(--ease) both;
 }
 
+/* On hover, raise the OUTER flex item into its own stacking layer so
+   the zoomed glyph paints above ALL sibling letters (not just those
+   before it in the DOM). Raising only the inner span isn't enough —
+   later siblings' own stacking would still cover it. */
 .hero__char:hover {
+  z-index: 5;
+}
+
+.hero__char-inner {
+  display: inline-block;
+  color: var(--paper);
+  -webkit-text-stroke: clamp(3px, 0.42vw, 6px) #2f7bff;   /* blue outline */
+  paint-order: stroke fill;             /* stroke behind the fill */
+  transform-origin: center center;
+  transition: color 0.28s var(--ease), -webkit-text-stroke-color 0.28s var(--ease),
+    transform 0.28s var(--ease);
+}
+
+.hero__char:hover .hero__char-inner {
   color: var(--magenta);
-  -webkit-text-fill-color: var(--magenta);
+  -webkit-text-stroke-color: var(--magenta);
+  transform: scale(1.25);
 }
 
 .hero__statement {
