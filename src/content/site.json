@@ -4,20 +4,25 @@
       "platform": "Instagram",
       "url": "https://instagram.com/",
       "icon": "instagram"
+    },
+    {
+      "icon": "linkedin",
+      "platform": "LinkedIn",
+      "url": "https://www.linkedin.com/in/emaad-qureshi-792175398/"
     }
   ],
   "featured": [
-    "2023-portrait-static",
-    "2026-dumb"
+    "2026-dumb",
+    "2026-eeee"
   ],
-  "aboutImage": "",
-  "tagline": "Painting · Illustration · Photography",
+  "aboutImage": "/uploads/gemini_generated_image_vl1pw5vl1pw5vl1p.png",
+  "tagline": "Gamers rise",
   "aboutBody": "I'm a multidisciplinary artist working between traditional painting, digital illustration, and photography. My work chases contrast — bold color against stillness, motion frozen mid-frame. This site is a living archive of finished pieces and experiments.\n\nOpen to commissions and collaborations.",
   "siteTitle": "Emu Draws",
-  "artistName": "EMOOD",
-  "heroPortrait": "",
-  "heroStatement": "An ongoing collection of work made across canvas, screen, and film — line, color, and the quiet drama in between.",
-  "metaDescription": "Selected works of Emaad — painting, illustration, and photography.",
+  "artistName": "EMAAD",
+  "heroPortrait": "/uploads/shaad-qureshi-pfp.png",
+  "heroStatement": "I like FNAF",
+  "metaDescription": "This is my gang",
   "categories": [
     "Painting",
     "Illustration",
@@ -26,7 +31,8 @@
     "Portrait",
     "Landscape",
     "Character",
-    "Environment"
+    "Environment",
+    "Cool Guys"
   ],
-  "email": "hello@example.com"
+  "email": "emudrawsblnstuff@gmail.com"
 }
