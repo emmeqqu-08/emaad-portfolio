@@ -1,12 +1,20 @@
 {
-  "siteTitle": "Emaad — Selected Works",
-  "metaDescription": "Selected works of Emaad — painting, illustration, and photography.",
-  "artistName": "EMAAD",
-  "tagline": "Painting · Illustration · Photography",
-  "heroStatement": "An ongoing collection of work made across canvas, screen, and film — line, color, and the quiet drama in between.",
-  "heroPortrait": "",
+  "socials": [
+    {
+      "platform": "Instagram",
+      "url": "https://instagram.com/",
+      "icon": "instagram"
+    }
+  ],
+  "featured": [],
   "aboutImage": "",
-  "email": "hello@example.com",
+  "tagline": "Painting · Illustration · Photography",
+  "aboutBody": "I'm a multidisciplinary artist working between traditional painting, digital illustration, and photography. My work chases contrast — bold color against stillness, motion frozen mid-frame. This site is a living archive of finished pieces and experiments.\n\nOpen to commissions and collaborations.",
+  "siteTitle": "Emu Draws",
+  "artistName": "EMAAD",
+  "heroPortrait": "",
+  "heroStatement": "An ongoing collection of work made across canvas, screen, and film — line, color, and the quiet drama in between.",
+  "metaDescription": "Selected works of Emaad — painting, illustration, and photography.",
   "categories": [
     "Painting",
     "Illustration",
@@ -17,9 +25,5 @@
     "Character",
     "Environment"
   ],
-  "socials": [
-    { "platform": "Instagram", "url": "https://instagram.com/", "icon": "instagram" }
-  ],
-  "featured": [],
-  "aboutBody": "I'm a multidisciplinary artist working between traditional painting, digital illustration, and photography. My work chases contrast — bold color against stillness, motion frozen mid-frame. This site is a living archive of finished pieces and experiments.\n\nOpen to commissions and collaborations."
+  "email": "hello@example.com"
 }
