@@ -118,39 +118,56 @@ That's the site live. Next, wire up the CMS login.
 ### 2. Give Decap a GitHub OAuth login (the `/admin` dashboard)
 
 GitHub Pages can't run the little server that completes a GitHub OAuth login, so
-Decap uses an external **OAuth proxy**. You have two free options:
+Decap uses an external **OAuth proxy**. Public proxies keep getting shut down, so
+we self-host one — for free — as two serverless functions on the existing
+**`nanorewind-4k`** Vercel project (no new service/account needed):
 
-**Option A — use a community-hosted proxy (fastest).** Several exist; you point
-Decap at one and register an OAuth app against it. Update the top of
-[`public/admin/config.yml`](public/admin/config.yml):
+- `api/decap/auth.ts` — starts the login, redirects to GitHub.
+- `api/decap/callback.ts` — exchanges the code for a token and hands it to Decap.
+- `api/decap/_base-url.ts` — resolves the proxy's own public URL (see below).
 
-```yaml
-backend:
-  name: github
-  repo: <owner>/<repo>          # e.g. shaadqrsh/emaad-portfolio
-  branch: main
-  base_url: https://<the-proxy-origin>   # the community proxy URL
-  auth_endpoint: auth
-```
+Setup, once:
 
-**Option B — self-host the proxy (most reliable, still free).** Deploy the tiny
-open-source [`decap-proxy`](https://github.com/sterlinghq/decap-proxy) (or
-`netlify-cms-oauth-provider`) to a free host such as **Cloudflare Workers**,
-**Deno Deploy**, or **Vercel** — it's a single endpoint with no ongoing cost.
-Then set `base_url` to your deployed proxy URL. This won't disappear on you the
-way a shared community proxy can.
+1. **Register a GitHub OAuth app**
+   GitHub → **Settings → Developer settings → OAuth Apps → New OAuth App**:
+   - **Homepage URL:** your Pages site URL
+     (`https://<username>.github.io/emaad-portfolio/`)
+   - **Authorization callback URL:**
+     `https://nanorewind-4k.vercel.app/api/decap/callback`
+   - Register, copy the **Client ID**, and **Generate a client secret**.
 
-**Register the GitHub OAuth app** (needed for either option):
-1. GitHub → **Settings → Developer settings → OAuth Apps → New OAuth App**.
-2. **Homepage URL:** your Pages site URL.
-   **Authorization callback URL:** the proxy's callback (e.g.
-   `https://<proxy-origin>/callback` — check the proxy's docs).
-3. Copy the **Client ID** and generate a **Client Secret**, and give them to the
-   proxy (community proxies show a form; self-hosted proxies take them as env
-   vars).
+2. **Add environment variables to the nanorewind-4k Vercel project**
+   Vercel → nanorewind-4k project → **Settings → Environment Variables**:
+   - `GITHUB_OAUTH_ID` = the Client ID **(required)**
+   - `GITHUB_OAUTH_SECRET` = the Client Secret **(required)**
+   - `OAUTH_PROXY_URL` = `https://nanorewind-4k.vercel.app` **(optional)** — the
+     proxy's own public origin. Leave it unset and the proxy auto-detects its URL
+     from the incoming request, which is correct on the default `*.vercel.app`
+     domain. **Set it only if you put the proxy behind a custom domain** (then it
+     must match that domain and the OAuth callback URL above).
 
-Once set, visiting `https://<your-username>.github.io/<repo>/admin/` shows a
-**“Login with GitHub”** button.
+   Then redeploy nanorewind (push, or Vercel → Deployments → Redeploy) so the
+   functions pick up the vars.
+
+3. **Point this site's config at the proxy**
+   In [`public/admin/config.yml`](public/admin/config.yml), set `base_url` to the
+   nanorewind Vercel domain (leave `auth_endpoint: api/decap/auth`):
+
+   ```yaml
+   backend:
+     name: github
+     repo: shaadqrsh/emaad-portfolio
+     branch: main
+     base_url: https://nanorewind-4k.vercel.app
+     auth_endpoint: api/decap/auth
+   ```
+
+Once deployed, visiting `https://<username>.github.io/emaad-portfolio/admin/`
+shows a **“Login with GitHub”** button.
+
+> The proxy is generic — it works for any Decap site, so you can reuse the same
+> nanorewind functions + one OAuth app for other projects later. Each site just
+> points its own `config.yml` `base_url` at the same proxy.
 
 ### 3. Who can log in
 

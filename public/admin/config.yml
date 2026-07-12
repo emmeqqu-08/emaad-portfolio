@@ -18,8 +18,11 @@ backend:
   name: github
   repo: shaadqrsh/emaad-portfolio
   branch: main
-  base_url: https://YOUR-OAUTH-PROXY.example.com
-  auth_endpoint: auth
+  # OAuth proxy is hosted as serverless functions on the nanorewind-4k
+  # Vercel project (api/decap/auth + api/decap/callback).
+  #   >>> REPLACE with that project's real domain. <<<
+  base_url: https://nanorewind-4k.vercel.app
+  auth_endpoint: api/decap/auth
 
 # Local dev: run `npx decap-server` and visit /admin to test
 # without touching GitHub. Ignored in production.
