@@ -11,7 +11,27 @@
 
 import siteData from '../content/site.json';
 
-export const site = siteData;
+/* Resolve a stored media path to a URL that works under the site's base
+   path. CMS uploads are saved as root-relative "/uploads/foo.png", but on
+   GitHub Pages the site lives under a subpath (e.g. /emaad-portfolio/), so
+   those need the base prepended. Absolute URLs (http...) and data URIs are
+   returned untouched. */
+export function assetUrl(pathOrUrl) {
+  if (!pathOrUrl) return '';
+  if (/^(https?:)?\/\//i.test(pathOrUrl) || pathOrUrl.startsWith('data:')) {
+    return pathOrUrl;
+  }
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const clean = pathOrUrl.startsWith('/') ? pathOrUrl : `/${pathOrUrl}`;
+  return `${base}${clean}`;
+}
+
+/* Site settings, with media paths resolved for the current base path. */
+export const site = {
+  ...siteData,
+  heroPortrait: assetUrl(siteData.heroPortrait),
+  aboutImage: assetUrl(siteData.aboutImage),
+};
 
 /* Eagerly import every work file as a raw string. */
 const files = import.meta.glob('../content/works/*.md', {
@@ -75,7 +95,7 @@ export const works = Object.entries(files)
     return {
       slug,
       title: fm.title ?? 'Untitled',
-      image: fm.image ?? '',
+      image: assetUrl(fm.image ?? ''),
       year: fm.year ?? '',
       medium: fm.medium ?? '',
       dimensions: fm.dimensions ?? '',

@@ -98,76 +98,104 @@ Config lives in [`public/admin/config.yml`](public/admin/config.yml).
 
 ---
 
-## One-time deployment (you do this once)
+## Deploying on GitHub Pages (free, no build-minute metering)
 
-This uses **Netlify** (free) so the artist can log in with just an email — no
-GitHub account required.
+The site is a static build hosted on **GitHub Pages**; content is committed to
+the GitHub repo by **Decap CMS** using **GitHub OAuth** for login. Everything
+here is free and open — no Netlify, no credits.
 
-1. **Push this repo to GitHub.**
+### 1. Turn on Pages + the deploy workflow
 
-2. **Create a Netlify site** at [netlify.com](https://netlify.com):
-   - "Add new site" → "Import an existing project" → pick this GitHub repo.
-   - Build command `npm run build`, publish directory `dist` (already set in
-     [`netlify.toml`](netlify.toml)). Deploy.
+1. Push this repo to GitHub.
+2. Repo → **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+3. The included workflow ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml))
+   builds the site and deploys it on every push to `main`. It sets the Vite base
+   path to `/<repo-name>/` automatically, so the site serves at:
+   **`https://<your-username>.github.io/<repo-name>/`**
 
-3. **Enable Netlify Identity** (the artist's login):
-   - Site → **Integrations / Identity** → **Enable Identity**.
-   - Under Identity → **Registration**, set to **Invite only** (so randoms can't sign up).
-   - Under Identity → **Services** → enable **Git Gateway**. This is what lets
-     Decap commit to GitHub on the artist's behalf.
+That's the site live. Next, wire up the CMS login.
 
-4. **Invite the artist:**
-   - Identity → **Invite users** → enter the artist's email.
-   - They get an email, click the link, set a password. Done.
+### 2. Give Decap a GitHub OAuth login (the `/admin` dashboard)
 
-5. **The artist goes to `yoursite.com/admin`** and logs in. That's it.
+GitHub Pages can't run the little server that completes a GitHub OAuth login, so
+Decap uses an external **OAuth proxy**. You have two free options:
+
+**Option A — use a community-hosted proxy (fastest).** Several exist; you point
+Decap at one and register an OAuth app against it. Update the top of
+[`public/admin/config.yml`](public/admin/config.yml):
+
+```yaml
+backend:
+  name: github
+  repo: <owner>/<repo>          # e.g. shaadqrsh/emaad-portfolio
+  branch: main
+  base_url: https://<the-proxy-origin>   # the community proxy URL
+  auth_endpoint: auth
+```
+
+**Option B — self-host the proxy (most reliable, still free).** Deploy the tiny
+open-source [`decap-proxy`](https://github.com/sterlinghq/decap-proxy) (or
+`netlify-cms-oauth-provider`) to a free host such as **Cloudflare Workers**,
+**Deno Deploy**, or **Vercel** — it's a single endpoint with no ongoing cost.
+Then set `base_url` to your deployed proxy URL. This won't disappear on you the
+way a shared community proxy can.
+
+**Register the GitHub OAuth app** (needed for either option):
+1. GitHub → **Settings → Developer settings → OAuth Apps → New OAuth App**.
+2. **Homepage URL:** your Pages site URL.
+   **Authorization callback URL:** the proxy's callback (e.g.
+   `https://<proxy-origin>/callback` — check the proxy's docs).
+3. Copy the **Client ID** and generate a **Client Secret**, and give them to the
+   proxy (community proxies show a form; self-hosted proxies take them as env
+   vars).
+
+Once set, visiting `https://<your-username>.github.io/<repo>/admin/` shows a
+**“Login with GitHub”** button.
+
+### 3. Who can log in
+
+Anyone who is a **collaborator on the repo** can log into `/admin` and edit.
+- Repo → **Settings → Collaborators → Add people** → add the artist's (and your)
+  GitHub username.
+- Both of you then log into `/admin` with your GitHub accounts and can publish.
 
 ### Testing the CMS locally (optional)
 
-`local_backend: true` is set in the config, so you can test the dashboard without
-touching GitHub. Note the admin only renders from a production build:
+`local_backend: true` is set, so you can test the dashboard without touching
+GitHub. The admin only renders from a production build:
 
 ```bash
-npx decap-server        # in one terminal
-npm run build && npm run preview   # in another; visit http://localhost:4173/admin/
+npx decap-server                                   # terminal 1
+BASE_PATH=/ npm run build && npm run preview        # terminal 2
+# then open http://localhost:4173/admin/
 ```
 
 ---
 
-## Transferring the repo to the artist's GitHub + shared access
+## Transferring the repo to the artist's GitHub
 
-The site is theirs, so the GitHub repo should live in their account. Here's how
-that works and how you keep access.
+The site is theirs, so the repo should live in their account.
 
-**Transfer the repo (recommended — keeps history):**
-1. In GitHub: repo → **Settings → General → Transfer ownership** → enter the
-   artist's GitHub username. (Or: they create an empty repo and you
-   `git push` to it; transfer is cleaner as it preserves issues/history.)
-2. After transfer, the repo URL changes to `github.com/<artist>/<repo>`. Update
-   your local remote: `git remote set-url origin <new-url>`.
-3. The artist adds you back as a collaborator: their repo → **Settings →
-   Collaborators → Add people** → your GitHub username. Now you both can push.
+1. GitHub → repo → **Settings → General → Transfer ownership** → the artist's
+   username (this preserves history).
+2. Update your local remote: `git remote set-url origin <new-url>`.
+3. The artist re-adds you: their repo → **Settings → Collaborators** → your
+   username. You both keep push access.
+4. **Update the CMS config:** in [`public/admin/config.yml`](public/admin/config.yml),
+   change `repo:` to `<artist-username>/<repo>` and push.
+5. Re-enable **Settings → Pages → Source: GitHub Actions** on the artist's copy
+   (the workflow deploys automatically after that). Update the OAuth app's
+   Homepage URL to the new Pages URL if it changed.
 
-**Reconnect Netlify after the transfer:** Netlify's GitHub link is tied to the
-old repo path, so relink it once — Netlify site → **Site configuration → Build &
-deploy → Continuous deployment → Manage repository / Link to a different
-repository** → pick the artist's repo. (The build settings and `netlify.toml`
-carry over.)
+Because login is by **repo collaborator**, both of you can maintain and edit the
+site indefinitely — no per-host accounts to manage.
 
-**Can both of you access the Netlify backend?** Yes — two separate kinds of access:
+### Custom domain later
 
-- **Netlify dashboard access** (deploys, settings, Identity, billing): Netlify
-  Team → **Members → Invite members** → add the other person's email. Free tier
-  allows multiple members. Whoever owns the Netlify team owns the site; the other
-  is added as a member/collaborator.
-- **The `/admin` content editor** (adding artwork, editing settings): this is
-  gated by **Netlify Identity**, separate from GitHub and the Netlify team. Just
-  invite each person's email under **Identity → Invite users**. Both you and the
-  artist can be Identity users and both edit content at `/admin`.
-
-So a typical setup: the **artist owns** the GitHub repo and the Netlify site;
-**you're added** as a GitHub collaborator, a Netlify team member, and an Identity
-user — giving you full ability to help maintain and edit going forward.
+If you attach a custom domain (served at the root `/` instead of `/<repo>/`),
+set `BASE_PATH: "/"` in the workflow's Build step (and it's fine to leave the
+Vite default as-is for local). Add a `CNAME` file via **Settings → Pages →
+Custom domain**.
 
 ---
 
@@ -184,5 +212,5 @@ user — giving you full ability to help maintain and edit going forward.
 
 ## Tech
 
-React 19 · Vite · React Router · Motion (animations) · Decap CMS · Netlify.
+React 19 · Vite · React Router · Motion (animations) · Decap CMS · GitHub Pages.
 Fonts: Anton (display), Fraunces (serif accents), Zen Kaku Gothic New (body).

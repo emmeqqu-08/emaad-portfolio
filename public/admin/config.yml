@@ -1,21 +1,34 @@
 # =============================================================
 # Decap CMS configuration
-# This defines the friendly dashboard the artist uses to add art.
-# On Netlify, the artist logs in at /admin with their email
-# (Netlify Identity + Git Gateway) — no GitHub account needed.
+# The friendly dashboard used to add art at /admin.
+#
+# Auth: GitHub OAuth. Decap needs a small OAuth handler to complete the
+# GitHub login handshake (GitHub Pages can't run one). We point at a
+# community-hosted OAuth proxy via `base_url` + `auth_endpoint` below.
+#
+#   >>> REPLACE base_url with your OAuth proxy origin. <<<
+#   See the README ("Deploying on GitHub Pages") for how to get one —
+#   either use a community proxy or deploy the tiny free proxy yourself.
+#
+# Whoever logs in must be a COLLABORATOR on the repo below. If you
+# transfer the repo, update `repo` to "<new-owner>/emaad-portfolio".
 # =============================================================
 
 backend:
-  name: git-gateway
+  name: github
+  repo: shaadqrsh/emaad-portfolio
   branch: main
+  base_url: https://YOUR-OAUTH-PROXY.example.com
+  auth_endpoint: auth
 
 # Local dev: run `npx decap-server` and visit /admin to test
-# without touching GitHub. Comment out for production if desired.
+# without touching GitHub. Ignored in production.
 local_backend: true
 
-# Where uploaded images are stored in the repo, and how the site
-# references them at runtime. Images land in public/uploads and are
-# served from the site root as /uploads/<file>.
+# Where uploaded images are stored in the repo, and how they are
+# referenced. Stored root-relative as /uploads/<file>; the site prepends
+# its base path at runtime (see assetUrl in src/lib/content.js), so the
+# markdown stays portable across hosts/subpaths.
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
