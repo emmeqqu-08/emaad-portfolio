@@ -1,7 +1,7 @@
 ---
 title: Gyro Zeppeli
 image: /uploads/20260712_220322.jpg
-description: "The \"Jo-bro\" from Jojo's Bizzare Adventure part 7, Steel Ball Run. "
+description: "The Jo-bro from Jojo's Bizzare Adventure part 7, Steel Ball Run. "
 categories:
   - CoverArt
   - Manga
