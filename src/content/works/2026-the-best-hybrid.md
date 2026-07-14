@@ -7,7 +7,7 @@ categories:
   - Character
   - Anime
   - Manga
-year: 2022
+year: 2025
 medium: Pen and Paper
 available: false
 uploadDate: 2025-12-05T10:59:00.000+05:30
