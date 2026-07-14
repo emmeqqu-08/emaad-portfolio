@@ -2,8 +2,7 @@
 title: Bites The Dust
 image: /uploads/20260712_220256.jpg
 description: The main antagonist from Jojo's Bizzare Adventure part 4, Diamond
-  is Unbreakable. Killer Queen is such a good stand design, and honestly one of
-  the best designs in the original universe.
+  is Unbreakable.
 categories:
   - Character
   - Anime
