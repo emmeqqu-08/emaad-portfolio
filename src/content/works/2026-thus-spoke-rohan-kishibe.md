@@ -7,7 +7,7 @@ description: This illustration is from Thus Spoke Rohan Kishibe Volume 1.
 categories:
   - CoverArt
   - Manga
-year: 2024
+year: 2025
 medium: Pen and Paper
 available: false
 uploadDate: 2025-12-04T10:54:00.000+05:30
