@@ -42,12 +42,13 @@ const files = import.meta.glob('../content/works/*.md', {
 
 /* --- Minimal, forgiving YAML-frontmatter parser -------------- */
 function parseFrontmatter(raw) {
-  const match = raw.match(/^---\s*\n([\s\S]*?)\n---/);
+  const match = raw.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
   if (!match) return {};
 
-  const lines = match[1].split('\n');
+  const lines = match[1].split(/\r?\n/);
   const data = {};
   let currentListKey = null;
+  let currentKey = null;
 
   for (const line of lines) {
     if (!line.trim()) continue;
@@ -64,13 +65,25 @@ function parseFrontmatter(raw) {
     if (kv) {
       const key = kv[1];
       const value = kv[2].trim();
-      if (value === '') {
+      currentKey = key;
+      if (/^[|>][+-]?$/.test(value)) {
+        currentListKey = null;
+        data[key] = '';
+      } else if (value === '') {
         // could be the start of a list block
         currentListKey = key;
         data[key] = [];
       } else {
         currentListKey = null;
         data[key] = coerce(stripQuotes(value));
+      }
+    } else if (currentKey && !currentListKey && /^\s+/.test(line)) {
+      const continuation = line.trim();
+      if (continuation) {
+        if (typeof data[currentKey] === 'string') {
+          data[currentKey] = (data[currentKey] + ' ' + stripQuotes(continuation)).trim();
+          data[currentKey] = stripQuotes(data[currentKey]);
+        }
       }
     }
   }
