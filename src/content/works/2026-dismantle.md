@@ -1,7 +1,7 @@
 ---
 title: Dismantle
 image: /uploads/untitled2_20260410223714.png
-description: This was my first attempt at digital art. I went forYuji Itadori
+description: This was my first attempt at digital art. I went for Yuji Itadori
   from JJK Modulo.
 categories:
   - DigitalArt
