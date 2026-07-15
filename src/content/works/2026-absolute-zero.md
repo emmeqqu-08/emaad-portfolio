@@ -1,8 +1,7 @@
 ---
 title: Absolute Zero
 image: /uploads/20260712_222004.jpg
-description: Rukia Kuchiki's Bankai, Hakka No Togame, is one of the best parts
-  of Bleach TYBW.
+description: Rukia Kuchiki's Bankai, Hakka No Togame, is just so breathtaking.
 categories:
   - Anime
   - Manga
