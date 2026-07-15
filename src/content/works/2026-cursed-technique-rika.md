@@ -2,7 +2,7 @@
 title: Cursed Technique- Rika
 image: /uploads/20260712_222426.jpg
 description: |
-  Despite what everyone says, I like Yuta as a character.
+  Despite what everyone says, I like Yuta as a character
 categories:
   - Manga
   - Illustration
