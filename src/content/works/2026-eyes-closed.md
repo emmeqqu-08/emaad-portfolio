@@ -10,5 +10,5 @@ categories:
 year: 2026
 medium: "Pen and Paper "
 available: false
-uploadDate: 2026-08-15T23:09:00.000+05:30
+uploadDate: 2026-07-25T23:09:00.000+05:30
 ---
