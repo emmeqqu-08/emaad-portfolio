@@ -1,5 +1,5 @@
 ---
-title: Strawberry
+title: Strawberry Shinigami
 image: /uploads/20260712_222327.jpg
 description: Bleach is tied with Jojo's for the best fashion in manga and nobody's close.
 categories:
