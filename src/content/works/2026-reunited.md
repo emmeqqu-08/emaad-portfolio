@@ -9,5 +9,5 @@ categories:
 year: 2026
 medium: Pen, paint and paper
 available: false
-uploadDate: 2026-08-08T00:07:00.000+05:30
+uploadDate: 2026-08-10T00:07:00.000+05:30
 ---
