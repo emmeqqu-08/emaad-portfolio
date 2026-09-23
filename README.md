@@ -156,7 +156,7 @@ Setup, once:
    ```yaml
    backend:
      name: github
-     repo: shaadqrsh/emaad-portfolio
+     repo: emmeqqu-08/emaad-portfolio
      branch: main
      base_url: https://nanorewind-4k.vercel.app
      auth_endpoint: api/decap/auth

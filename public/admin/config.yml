@@ -16,7 +16,7 @@
 
 backend:
   name: github
-  repo: shaadqrsh/emaad-portfolio
+  repo: emmeqqu-08/emaad-portfolio
   branch: main
   # OAuth proxy is hosted as serverless functions on the nanorewind-4k
   # Vercel project (api/decap/auth + api/decap/callback).
