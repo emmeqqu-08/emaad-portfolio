@@ -7,11 +7,11 @@ import Lightbox from '../components/Lightbox';
 import './Works.css';
 
 const SORTS = [
-  { id: 'newest', label: 'Newest added' },
-  { id: 'oldest', label: 'Oldest added' },
-  { id: 'year-desc', label: 'Year ↓' },
-  { id: 'year-asc', label: 'Year ↑' },
-  { id: 'title', label: 'Title A–Z' },
+  { id: 'newest', label: 'Recently added' },
+  { id: 'oldest', label: 'First added' },
+  { id: 'year-desc', label: 'Year, newest first' },
+  { id: 'year-asc', label: 'Year, oldest first' },
+  { id: 'title', label: 'Title, A to Z' },
 ];
 
 export default function Works() {

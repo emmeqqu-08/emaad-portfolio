@@ -16,7 +16,7 @@ export default function Footer() {
 
         <p className="footer__meta">
           <span className="menacing" aria-hidden>ゴゴゴ</span>
-          <span>&copy; {site.artistName}. All works property of the artist.</span>
+          <span>All artwork &copy; {site.artistName}.</span>
         </p>
       </div>
     </footer>

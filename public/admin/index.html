@@ -7,7 +7,19 @@
     <title>Emaad · Content Manager</title>
   </head>
   <body>
-    <!-- Decap CMS: the friendly dashboard the artist logs into. -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <!-- Decap CMS: the friendly dashboard the artist logs into.
+         Pinned to an exact version with a Subresource Integrity hash, so the
+         browser refuses to run it if the CDN ever serves different code.
+         This page holds a GitHub token with write access to the repo, so
+         it must never auto-load whatever "latest" happens to be.
+         To upgrade: change the version, then regenerate the hash with
+           curl -sL https://unpkg.com/decap-cms@X.Y.Z/dist/decap-cms.js \
+             | openssl dgst -sha384 -binary | openssl base64 -A
+         and prefix it with "sha384-". -->
+    <script
+      src="https://unpkg.com/decap-cms@3.17.3/dist/decap-cms.js"
+      integrity="sha384-RWRzuHfiZSWCt3nEvG7B0v3cMgM1C2UuJmgBSL92GQh4uXmNSkbcthql/mNBqvjr"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

@@ -115,7 +115,7 @@ collections:
           label: "Date added",
           widget: "datetime",
           default: "",
-          hint: "Auto-set to now; used for 'Newest' sorting.",
+          hint: "Filled in automatically. The Works page uses it for the 'Recently added' sort.",
         }
 
   # ---------------------------------------------------------------
@@ -134,7 +134,7 @@ collections:
               name: "siteTitle",
               label: "Browser tab title / link title",
               widget: "string",
-              hint: "Shows in the browser tab and as the title when the site link is shared. e.g. Emaad — Selected Works.",
+              hint: "Shows in the browser tab and as the title when the site link is shared. e.g. Emu Draws.",
             }
           - {
               name: "metaDescription",
@@ -189,7 +189,7 @@ collections:
             required: false
             label_singular: "Social link"
             summary: "{{fields.platform}}"
-            hint: "Add any platforms — Instagram, LinkedIn, DeviantArt, ArtStation, etc."
+            hint: "Add as many as you like: Instagram, LinkedIn, DeviantArt, ArtStation and so on."
             fields:
               - { name: "platform", label: "Platform name", widget: "string", hint: "e.g. LinkedIn, DeviantArt." }
               - { name: "url", label: "Link", widget: "string", hint: "Full URL, e.g. https://linkedin.com/in/you." }
@@ -224,7 +224,7 @@ collections:
               required: false,
               min: 0,
               max: 6,
-              hint: "Pick which pieces appear in the home 'Selected' strip. Leave empty to auto-show your newest work.",
+              hint: "Pick which pieces appear in the Spotlight strip on the home page. Leave it empty to show your newest work instead.",
             }
           - {
               name: "aboutBody",

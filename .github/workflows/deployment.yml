@@ -27,7 +27,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - run: npm ci
@@ -40,6 +40,9 @@ jobs:
         run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+          # Public URL used for canonical links, sitemap.xml and structured
+          # data. Change this too if you move to a custom domain.
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import './Lightbox.css';
@@ -15,14 +15,47 @@ function formatDate(iso) {
 }
 
 export default function Lightbox({ work, onClose, onPrev, onNext }) {
+  const dialogRef = useRef(null);
+  const closeRef = useRef(null);
+  const isOpen = Boolean(work);
+
   const handleKey = useCallback(
     (e) => {
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowLeft') onPrev();
       if (e.key === 'ArrowRight') onNext();
+      // Keep keyboard focus inside the dialog while it is open.
+      if (e.key === 'Tab' && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])');
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const inside = dialogRef.current.contains(document.activeElement);
+        if (e.shiftKey && (document.activeElement === first || !inside)) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (document.activeElement === last || !inside)) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     },
     [onClose, onPrev, onNext]
   );
+
+  // On open, move focus into the dialog; on close, return it to whatever
+  // opened it (usually the artwork tile), so keyboard users don't lose
+  // their place.
+  useEffect(() => {
+    if (!isOpen) return;
+    const opener = document.activeElement;
+    closeRef.current?.focus();
+    return () => {
+      if (opener instanceof HTMLElement && opener !== document.body && document.contains(opener)) {
+        opener.focus({ preventScroll: true });
+      }
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (!work) return;
@@ -43,14 +76,18 @@ export default function Lightbox({ work, onClose, onPrev, onNext }) {
     <AnimatePresence>
       {work && (
         <motion.div
+          ref={dialogRef}
           className="lb"
+          role="dialog"
+          aria-modal="true"
+          aria-label={work.title}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
           onClick={onClose}
         >
-          <button className="lb__close" onClick={onClose} aria-label="Close">
+          <button ref={closeRef} className="lb__close" onClick={onClose} aria-label="Close">
             ✕
           </button>
 

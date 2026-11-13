@@ -20,7 +20,7 @@ export default function About() {
 
           {site.aboutImage && (
             <figure className="about__figure">
-              <img src={site.aboutImage} alt={`${site.artistName} in the studio`} />
+              <img src={site.aboutImage} alt={`Photo of ${site.artistName}`} />
               <span className="about__figure-frame" aria-hidden />
             </figure>
           )}

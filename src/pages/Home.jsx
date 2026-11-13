@@ -44,7 +44,7 @@ export default function Home() {
         <div className="hero__inner shell">
           <div className="hero__text">
             <p className="hero__eyebrow">
-              <span className="hero__dot" /> Portfolio · Showcase
+              <span className="hero__dot" /> Portfolio
             </p>
 
             <h1 className="hero__title">
@@ -63,18 +63,18 @@ export default function Home() {
 
             <div className="hero__actions">
               <Link to="/works" className="btn btn--gold">
-                My Works
+                See my work
                 <span className="btn__arrow" aria-hidden>→</span>
               </Link>
               <Link to="/about" className="btn btn--ghost">
-                About Me
+                About me
               </Link>
             </div>
           </div>
 
           {hasPortrait && (
             <div className="hero__portrait">
-              <img src={site.heroPortrait} alt={`${site.artistName}, artist`} />
+              <img src={site.heroPortrait} alt={`Portrait of ${site.artistName}`} />
               <span className="hero__portrait-frame" aria-hidden />
             </div>
           )}

@@ -6,7 +6,8 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Works from './pages/Works';
 import About from './pages/About';
-import { site } from './lib/content';
+import { site, works } from './lib/content';
+import { pageMeta } from './lib/pageMeta';
 
 export default function App() {
   const location = useLocation();
@@ -21,27 +22,29 @@ export default function App() {
     if (!isDeepLink) window.scrollTo(0, 0);
   }, [location.pathname, location.search]);
 
-  // Keep the browser-tab title and meta description in sync with the
-  // values the artist sets in the dashboard. (For social-embed previews,
-  // these are also baked into the static HTML at build time — see
-  // scripts/inject-meta.js — since link crawlers don't run JS.)
+  // Give each page its own tab title and meta description, built from the
+  // dashboard settings. The same values are baked into each page's static
+  // HTML by scripts/site-meta.js, since link crawlers don't run JS.
   useEffect(() => {
-    if (site.siteTitle) document.title = site.siteTitle;
-    if (site.metaDescription) {
-      let tag = document.querySelector('meta[name="description"]');
-      if (!tag) {
-        tag = document.createElement('meta');
-        tag.setAttribute('name', 'description');
-        document.head.appendChild(tag);
-      }
-      tag.setAttribute('content', site.metaDescription);
+    const route = ['/works', '/about'].includes(location.pathname) ? location.pathname : '/';
+    const { title, description } = pageMeta(route, site, works.length);
+    document.title = title;
+    let tag = document.querySelector('meta[name="description"]');
+    if (!tag) {
+      tag = document.createElement('meta');
+      tag.setAttribute('name', 'description');
+      document.head.appendChild(tag);
     }
-  }, []);
+    tag.setAttribute('content', description);
+  }, [location.pathname]);
 
   return (
     <>
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <Nav />
-      <main>
+      <main id="main" tabIndex={-1}>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />

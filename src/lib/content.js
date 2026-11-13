@@ -150,5 +150,18 @@ export const featuredWorks = (() => {
    `icon` field lets the artist pick an icon in the dashboard; if unset
    we fall back to guessing from the platform name. */
 export const socials = (Array.isArray(site.socials) ? site.socials : [])
-  .filter((s) => s && s.url && s.platform)
-  .map((s) => ({ platform: s.platform, url: s.url, icon: s.icon || '' }));
+  .filter((s) => s && s.url && s.platform && isSafeLinkUrl(s.url))
+  .map((s) => ({ platform: s.platform, url: s.url.trim(), icon: s.icon || '' }));
+
+/* Only allow ordinary web links in the social list. The URL field in
+   the dashboard is free text and is rendered straight into an <a href>,
+   so a value like "javascript:..." would run as code when clicked.
+   Anything that isn't http(s) is dropped rather than rendered. */
+function isSafeLinkUrl(value) {
+  try {
+    const { protocol } = new URL(String(value).trim());
+    return protocol === 'https:' || protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
