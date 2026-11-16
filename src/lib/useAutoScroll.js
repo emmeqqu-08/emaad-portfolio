@@ -40,6 +40,19 @@ export function useAutoScroll(speed = 0.4) {
     el.addEventListener('touchstart', pause, { passive: true });
     el.addEventListener('touchend', resume, { passive: true });
 
+    // Stop the loop entirely while the track is off screen, so it doesn't
+    // compete with page scrolling on phones once the user scrolls past it.
+    let visible = true;
+    const io = new IntersectionObserver(([entry]) => {
+      const was = visible;
+      visible = entry.isIntersecting;
+      if (visible && !was) {
+        pos = el.scrollLeft;
+        raf = requestAnimationFrame(tick);
+      }
+    });
+    io.observe(el);
+
     // Track the position in a float we own. Reading el.scrollLeft back
     // each frame can round to an integer, so a sub-pixel `speed` (e.g.
     // 0.4) would never accumulate — we'd be stuck at 0. Instead we keep
@@ -57,12 +70,13 @@ export function useAutoScroll(speed = 0.4) {
         // Stay in sync if the user scrolled manually while paused.
         pos = el.scrollLeft;
       }
-      raf = requestAnimationFrame(tick);
+      if (visible) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
+      io.disconnect();
       el.removeEventListener('mouseenter', pause);
       el.removeEventListener('mouseleave', resume);
       el.removeEventListener('focusin', pause);

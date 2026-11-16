@@ -26,6 +26,27 @@ export function assetUrl(pathOrUrl) {
   return `${base}${clean}`;
 }
 
+/* Resized WebP copies of uploads, made by scripts/responsive-images.js.
+   Loaded through a glob so a missing manifest (script not run yet) just
+   means every image falls back to its original file. */
+const imageManifest =
+  Object.values(
+    import.meta.glob('../generated/images.json', { eager: true, import: 'default' })
+  )[0] ?? {};
+
+/* Responsive image attributes for a stored media path: { src, srcSet,
+   width, height }. `src` stays the original so anything that ignores
+   srcset still works. */
+export function responsiveImage(pathOrUrl) {
+  const src = assetUrl(pathOrUrl);
+  const entry = imageManifest[pathOrUrl];
+  if (!entry) return { src };
+  const srcSet = entry.widths
+    .map((w) => `${assetUrl(`/_img/${entry.stem}-${w}.webp`)} ${w}w`)
+    .join(', ');
+  return { src, srcSet, width: entry.width, height: entry.height };
+}
+
 /* Site settings, with media paths resolved for the current base path. */
 export const site = {
   ...siteData,
@@ -109,6 +130,7 @@ export const works = Object.entries(files)
       slug,
       title: fm.title ?? 'Untitled',
       image: assetUrl(fm.image ?? ''),
+      img: responsiveImage(fm.image ?? ''),
       year: fm.year ?? '',
       medium: fm.medium ?? '',
       dimensions: fm.dimensions ?? '',

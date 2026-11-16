@@ -14,7 +14,14 @@ function TeaserCard({ w, i, ariaHidden = false }) {
       aria-hidden={ariaHidden || undefined}
     >
       <div className="teaser__frame">
-        <img src={w.image} alt={w.title} loading="lazy" />
+        <img
+          src={w.img.src}
+          srcSet={w.img.srcSet}
+          sizes="(max-width: 480px) 78vw, 320px"
+          alt={w.title}
+          loading="lazy"
+          decoding="async"
+        />
         <div className="teaser__overlay">
           <span className="teaser__cat">{w.categories[0] ?? 'Work'}</span>
           <span className="teaser__view">View ↗</span>

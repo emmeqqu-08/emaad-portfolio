@@ -94,3 +94,13 @@
   .nav__link { font-size: 0.7rem; letter-spacing: 0.1em; }
   .nav__glyph { display: none; }
 }
+
+/* Touch devices: backdrop blur over scrolling artwork re-renders every
+   frame on phone GPUs. A more opaque bar reads the same without it. */
+@media (hover: none) {
+  .nav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: linear-gradient(to bottom, rgba(12, 10, 18, 0.97), rgba(12, 10, 18, 0.85));
+  }
+}

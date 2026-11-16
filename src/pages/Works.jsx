@@ -158,7 +158,16 @@ export default function Works() {
                 onClick={() => setLightboxIndex(i)}
               >
                 <div className="tile__img">
-                  <img src={w.image} alt={w.title} loading="lazy" />
+                  <img
+                    src={w.img.src}
+                    srcSet={w.img.srcSet}
+                    sizes="(max-width: 440px) 100vw, (max-width: 760px) 50vw, (max-width: 1100px) 33vw, 25vw"
+                    width={w.img.width}
+                    height={w.img.height}
+                    alt={w.title}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
                 <div className="tile__info">
                   <span className="tile__name">{w.title}</span>

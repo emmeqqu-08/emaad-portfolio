@@ -122,7 +122,12 @@ export default function Lightbox({ work, onClose, onPrev, onNext }) {
             key={work.slug}
           >
             <div className="lb__figure">
-              <img src={work.image} alt={work.title} />
+              <img
+                src={work.img.src}
+                srcSet={work.img.srcSet}
+                sizes="(max-width: 900px) 100vw, 60vw"
+                alt={work.title}
+              />
             </div>
 
             <aside className="lb__meta">

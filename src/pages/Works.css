@@ -234,3 +234,9 @@
   from { opacity: 0; transform: translateY(28px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* Touch devices have no hover state, so the resting filter only dims the
+   art while forcing every tile through an extra GPU pass during scroll. */
+@media (hover: none) {
+  .tile__img img { filter: none; transition: none; }
+}

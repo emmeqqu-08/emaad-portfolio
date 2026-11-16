@@ -403,3 +403,8 @@
   .teaser__card { flex-basis: 78vw; }
   .hero__actions .btn { flex: 1; justify-content: center; }
 }
+
+/* Touch: no hover, so skip the per-image filter pass (see Works.css). */
+@media (hover: none) {
+  .teaser__frame img { filter: none; transition: none; }
+}

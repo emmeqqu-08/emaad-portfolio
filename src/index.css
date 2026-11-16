@@ -65,14 +65,23 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+}
 
-  /* Layered atmosphere: subtle radial glow + halftone dot texture */
+/* Layered atmosphere: subtle radial glow + halftone dot texture.
+   Painted on a fixed layer rather than with background-attachment:
+   fixed, which makes mobile browsers repaint the whole page on every
+   scroll frame. A fixed element is painted once and composited. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-image:
     radial-gradient(120% 90% at 15% -10%, rgba(106, 44, 156, 0.28), transparent 55%),
     radial-gradient(90% 70% at 100% 0%, rgba(224, 57, 138, 0.14), transparent 50%),
     radial-gradient(circle, var(--halftone) 1px, transparent 1.4px);
   background-size: auto, auto, 22px 22px;
-  background-attachment: fixed;
 }
 
 /* Fine film-grain overlay for cinematic texture */
@@ -173,6 +182,16 @@ main:focus {
     transparent 18px 26px
   );
   opacity: 0.55;
+}
+
+/* Touch devices: drop effects that cost a lot per scroll frame on phone
+   GPUs. The grain's overlay blend makes the browser re-blend the whole
+   screen on every frame; a plain low-opacity layer looks nearly the same. */
+@media (hover: none) {
+  body::after {
+    mix-blend-mode: normal;
+    opacity: 0.02;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
